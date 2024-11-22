@@ -49,6 +49,7 @@ def auto_delete_file_on_delete(sender, instance, **kwargs):
 class Reviews(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, related_name="reviews")
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    username = models.EmailField(blank=True, max_length=254)
     rating = models.IntegerField(default=0)
     comment = models.TextField(max_length=1000, default="", blank=False)
     createdAt = models.DateTimeField(auto_now_add=True, editable=False)

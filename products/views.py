@@ -136,7 +136,11 @@ def create_update_review(request, pk):
         )
 
     elif review.exists():
-        new_review = {"rating": data['rating'], "comment": data['comment']}
+        new_review = {
+            "username": user.username,
+            "rating": data['rating'],
+            "comment": data['comment']
+        }
         review.update(**new_review)
         rating = product.reviews.aggregate(avg_ratings=Avg('rating'))
         product.ratings = rating['avg_ratings']
@@ -147,6 +151,7 @@ def create_update_review(request, pk):
         Reviews.objects.create(
             user=user,
             product=product,
+            username=user.username,
             rating=data['rating'],
             comment=data['comment'],
         )
