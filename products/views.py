@@ -4,7 +4,7 @@ from django.db.models import Avg
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
 from .serializers import ProductSerializer, ProductImagesSerializer
@@ -46,7 +46,7 @@ def get_product(request, pk):
 
 # Create new Product
 @api_view(["POST"])
-@permission_classes(IsAuthenticated)
+@permission_classes([IsAuthenticated, IsAdminUser])
 def create_new_product(request):
     data = request.data
     serializer = ProductSerializer(data=data)
@@ -61,7 +61,7 @@ def create_new_product(request):
 
 # Update a Product
 @api_view(["PUT"])
-@permission_classes(IsAuthenticated)
+@permission_classes([IsAuthenticated, IsAdminUser])
 def update_product(request, pk):
     product = get_object_or_404(Product, id=pk)
 
@@ -86,7 +86,7 @@ def update_product(request, pk):
 
 # Delete a Product
 @api_view(["DELETE"])
-@permission_classes(IsAuthenticated)
+@permission_classes([IsAuthenticated, IsAdminUser])
 def delete_product(request, pk):
     product = get_object_or_404(Product, id=pk)
 
@@ -107,6 +107,7 @@ def delete_product(request, pk):
 
 # Upload a Product Image
 @api_view(["POST"])
+@permission_classes([IsAuthenticated, IsAdminUser])
 def upload_product_image(request):
     data = request.data
     files = request.FILES.getlist("images")
@@ -122,7 +123,7 @@ def upload_product_image(request):
 
 
 @api_view(["POST"])
-@permission_classes([IsAuthenticated, ])
+@permission_classes([IsAuthenticated])
 def create_update_review(request, pk):
     user = request.user
     data = request.data
@@ -164,7 +165,7 @@ def create_update_review(request, pk):
 
 
 @api_view(["DELETE"])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated, IsAdminUser])
 def delete_review(request, pk):
     user = request.user
     product = get_object_or_404(Product, id=pk)

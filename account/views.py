@@ -13,6 +13,8 @@ from rest_framework.decorators import api_view, permission_classes
 
 from account.serializers import UserSerializer, SignUpSerializer
 
+from utils.helpers import get_current_host
+
 
 # Create your views here.
 
@@ -62,12 +64,6 @@ def update_user(request):
 
     serializer = UserSerializer(user, many=False)
     return Response(serializer.data)
-
-
-def get_current_host(request):
-    protocol = request.is_secure() and 'https' or 'http'
-    host = request.get_host()
-    return "%s://%s" % (protocol, host)
 
 
 @api_view(['POST'])
